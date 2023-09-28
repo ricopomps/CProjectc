@@ -14,7 +14,8 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     private bool doubleJumpAvailable = true;
-    private bool landed = true;
+    private bool landing = false;
+    private bool shouldTriggerLandAnimation = false;
     private bool attacking = false;
 
 
@@ -35,11 +36,16 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         if (!IsOnFloor())
         {
             velocity.Y += gravity * (float)delta;
-            landed = false;
+            shouldTriggerLandAnimation = true;
         }
 
         if (IsOnFloor())
         {
+            if (shouldTriggerLandAnimation)
+            {
+                HandleLand();
+                shouldTriggerLandAnimation = false;
+            }
 
             doubleJumpAvailable = true;
         }
@@ -94,6 +100,10 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
             {
                 anim = "attacking";
             }
+            else if (landing)
+            {
+                anim = "landed";
+            }
             else
             {
                 anim = vector.X != 0 ? "run" : "idle";
@@ -123,8 +133,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
 
     private void HandleLand()
     {
-        // landed = true;
-        SetAnimation("landed");
+        landing = true;
         landTimer.Start();
     }
 
@@ -135,7 +144,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
 
     private void OnLandTimerTimeout()
     {
-        landed = false;
+        landing = false;
     }
 
 }

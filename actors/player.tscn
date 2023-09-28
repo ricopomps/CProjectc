@@ -104,13 +104,13 @@ region = Rect2(144, 0, 48, 48)
 atlas = ExtResource("3_0nrd3")
 region = Rect2(0, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ciiir"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_td3r4"]
 atlas = ExtResource("5_3j1kv")
-region = Rect2(0, 0, 48, 64)
+region = Rect2(0, 14, 48, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ooerp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tyd1e"]
 atlas = ExtResource("5_3j1kv")
-region = Rect2(48, 0, 48, 64)
+region = Rect2(48, 14, 48, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vjdek"]
 atlas = ExtResource("3_hjbm8")
@@ -232,10 +232,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ciiir")
+"texture": SubResource("AtlasTexture_td3r4")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ooerp")
+"texture": SubResource("AtlasTexture_tyd1e")
 }],
 "loop": true,
 "name": &"landed",
@@ -287,7 +287,6 @@ scale = Vector2(1.84846, 1.85536)
 sprite_frames = SubResource("SpriteFrames_e6d5e")
 animation = &"landed"
 autoplay = "idle"
-frame_progress = 0.377437
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -301,4 +300,4 @@ position = Vector2(1.08338, -54.3863)
 one_shot = true
 
 [node name="LandTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 0.25
