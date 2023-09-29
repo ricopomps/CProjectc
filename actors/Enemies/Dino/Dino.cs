@@ -7,6 +7,7 @@ public partial class Dino : CharacterBody2D
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public new float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     private bool hit = false;
+    private bool dead = false;
     private Timer hitTimer;
     private string animation;
     private AnimationPlayer animator;
@@ -21,6 +22,7 @@ public partial class Dino : CharacterBody2D
     }
     private void OnDamageableHit(Node node, float ammountChanged)
     {
+        if (damageable.health <= 0) dead = true;
         hit = true;
         hitTimer.Start();
         GD.Print("OUCH!");
@@ -43,7 +45,11 @@ public partial class Dino : CharacterBody2D
         string anim;
         if (IsOnFloor())
         {
-            if (hit)
+            if (dead)
+            {
+                anim = "dead";
+            }
+            else if (hit)
             {
                 anim = "hurt";
             }

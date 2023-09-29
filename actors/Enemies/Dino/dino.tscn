@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://17r1bjhnsh7"]
+[gd_scene load_steps=13 format=3 uid="uid://17r1bjhnsh7"]
 
 [ext_resource type="Script" path="res://actors/Enemies/Dino/Dino.cs" id="1_7say6"]
 [ext_resource type="Texture2D" uid="uid://bktcxtx02s6ng" path="res://assets/Sprite Pack 8/4 - Percy/Idle (32 x 32).png" id="1_cduba"]
@@ -112,6 +112,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_4ue1w"]
 resource_name = "hurt"
@@ -217,9 +229,62 @@ tracks/3/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_gylrn"]
+resource_name = "dead"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_t7ftk")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.261799, 0.0, -0.261799, 0.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qxfon"]
 _data = {
 "RESET": SubResource("Animation_ulrqj"),
+"dead": SubResource("Animation_gylrn"),
 "fall": SubResource("Animation_8cuuw"),
 "hurt": SubResource("Animation_4ue1w"),
 "idle": SubResource("Animation_3sm6s")
@@ -249,4 +314,6 @@ libraries = {
 script = ExtResource("2_odc5n")
 
 [node name="HitTimer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.35
+
+[connection signal="animation_finished" from="AnimationPlayer" to="Damageable" method="OnAnimationFinished"]

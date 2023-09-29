@@ -1984,6 +1984,6 @@ position = Vector2(1277.5, 521.5)
 shape = SubResource("RectangleShape2D_0jpw7")
 
 [node name="Dino" parent="." instance=ExtResource("7_jvgcq")]
-position = Vector2(398, 138)
+position = Vector2(417, 159)
 
 [node name="HealthChangeManager" parent="." instance=ExtResource("8_cs1t0")]
