@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dkfjs0smd5pmy"]
+[gd_scene load_steps=15 format=3 uid="uid://dkfjs0smd5pmy"]
 
 [ext_resource type="Script" path="res://Node2D.cs" id="1_c7aea"]
 [ext_resource type="Texture2D" uid="uid://teljvm6v3uow" path="res://assets/Cave Tileset/Brown_Tile_Terrain (16 x 16).png" id="2_ndjlw"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://db6j8w1k0jrvf" path="res://assets/Cave Tileset/_Complete_static_BG_(288 x 208).png" id="5_cry6g"]
 [ext_resource type="PackedScene" uid="uid://17r1bjhnsh7" path="res://actors/Enemies/Dino/dino.tscn" id="7_jvgcq"]
 [ext_resource type="PackedScene" uid="uid://dk66vcypg2gab" path="res://UI/health_change_manager.tscn" id="8_cs1t0"]
-[ext_resource type="PackedScene" uid="uid://dqai8i5s1u46" path="res://UI/health_changed_label.tscn" id="9_gu0iu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pftte"]
 texture = ExtResource("2_ndjlw")
@@ -1985,6 +1984,6 @@ position = Vector2(1277.5, 521.5)
 shape = SubResource("RectangleShape2D_0jpw7")
 
 [node name="Dino" parent="." instance=ExtResource("7_jvgcq")]
+position = Vector2(398, 138)
 
 [node name="HealthChangeManager" parent="." instance=ExtResource("8_cs1t0")]
-healthChangedLabelScene = ExtResource("9_gu0iu")

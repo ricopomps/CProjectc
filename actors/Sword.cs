@@ -3,7 +3,7 @@ using System;
 
 public partial class Sword : Area2D
 {
-    private float damage = 10;
+    private float damage = 3;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -23,8 +23,6 @@ public partial class Sword : Area2D
             {
                 damageable.Hit(damage);
             }
-            // Perform actions on each child here.
-            GD.Print("Child name: " + child.Name);
         }
     }
 

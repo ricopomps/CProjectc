@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://17r1bjhnsh7"]
+[gd_scene load_steps=12 format=3 uid="uid://17r1bjhnsh7"]
 
+[ext_resource type="Script" path="res://actors/Enemies/Dino/Dino.cs" id="1_7say6"]
 [ext_resource type="Texture2D" uid="uid://bktcxtx02s6ng" path="res://assets/Sprite Pack 8/4 - Percy/Idle (32 x 32).png" id="1_cduba"]
 [ext_resource type="Script" path="res://actors/Enemies/Dino/Damageable.cs" id="2_odc5n"]
+[ext_resource type="Texture2D" uid="uid://e26u6nb12g67" path="res://assets/Sprite Pack 8/4 - Percy/Hurt (32 x 32).png" id="3_t7ftk"]
+[ext_resource type="Texture2D" uid="uid://dwys0806un2x" path="res://assets/Sprite Pack 8/4 - Percy/Falling (32 x 32).png" id="4_1mqmx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v833f"]
 size = Vector2(50, 44)
@@ -110,14 +113,122 @@ tracks/3/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_4ue1w"]
+resource_name = "hurt"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_t7ftk")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_8cuuw"]
+resource_name = "fall"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_1mqmx")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qxfon"]
 _data = {
 "RESET": SubResource("Animation_ulrqj"),
+"fall": SubResource("Animation_8cuuw"),
+"hurt": SubResource("Animation_4ue1w"),
 "idle": SubResource("Animation_3sm6s")
 }
 
-[node name="Dino" type="CharacterBody2D"]
+[node name="Dino" type="CharacterBody2D" node_paths=PackedStringArray("damageable")]
 position = Vector2(388, 283)
+script = ExtResource("1_7say6")
+damageable = NodePath("Damageable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 10)

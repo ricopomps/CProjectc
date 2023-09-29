@@ -5,7 +5,11 @@ public partial class HealthChangeManager : Control
 {
     [Export]
     public PackedScene healthChangedLabelScene;
-    private GlobalSignalBus signalBus;
+    [Export]
+    public Color damageColor = new Color("Red");
+
+    [Export]
+    public Color healColor = new Color("Green");
     public override void _Ready()
     {
         Callable callable = new Callable(this, nameof(OnSignalHealthChanged));
@@ -17,10 +21,15 @@ public partial class HealthChangeManager : Control
     {
     }
 
-    private void OnSignalHealthChanged(Node node, float value)
+    private void OnSignalHealthChanged(Node node, float ammountChanged)
     {
         var labelInstance = healthChangedLabelScene.Instantiate() as Label;
         node.AddChild(labelInstance);
-        labelInstance.Text = value.ToString();
+        labelInstance.Text = ammountChanged.ToString();
+
+        if (ammountChanged >= 0)
+            labelInstance.Modulate = healColor;
+        else
+            labelInstance.Modulate = damageColor;
     }
 }
