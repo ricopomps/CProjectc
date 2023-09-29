@@ -11,6 +11,8 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private AnimationPlayer animator;
     private Timer attackTimer;
     private Timer landTimer;
+    private CollisionShape2D shape;
+    private CollisionShape2D crouchShape;
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     private bool doubleJumpAvailable = true;
@@ -26,8 +28,11 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         attackTimer = GetNode<Timer>("AttackTimer");
         landTimer = GetNode<Timer>("LandTimer");
+        shape = GetNode<CollisionShape2D>("CollisionShape2D");
+        crouchShape = GetNode<CollisionShape2D>("CrouchColisionShape");
         attackTimer.Timeout += OnAttackTimerTimeout;
         landTimer.Timeout += OnLandTimerTimeout;
+        crouchShape.Disabled = true;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -38,7 +43,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         {
             velocity.Y += gravity * (float)delta;
             shouldTriggerLandAnimation = true;
-            crouching = false;
+            DisableCrouch();
         }
 
         if (IsOnFloor())
@@ -52,9 +57,9 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
             doubleJumpAvailable = true;
         }
 
-        if (IsOnFloor() && !attacking && Input.IsActionJustPressed("crouch"))
+        if (Input.IsActionJustPressed("crouch") && IsOnFloor() && !attacking && !landing)
         {
-            HandCrouch();
+            HandleCrouch();
         }
 
         // Handle Jump.
@@ -123,7 +128,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private void HandleAttack()
     {
         attacking = true;
-        crouching = false;
+        DisableCrouch();
         attackTimer.Start();
     }
 
@@ -133,9 +138,26 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         landTimer.Start();
     }
 
-    private void HandCrouch()
+    private void HandleCrouch()
     {
-        crouching = !crouching;
+        if (crouching)
+            DisableCrouch();
+        else
+            EnableCrouch();
+    }
+
+    private void DisableCrouch()
+    {
+        crouching = false;
+        shape.Disabled = false;
+        crouchShape.Disabled = true;
+    }
+
+    private void EnableCrouch()
+    {
+        crouching = true;
+        shape.Disabled = true;
+        crouchShape.Disabled = false;
     }
 
     private void OnAttackTimerTimeout()
@@ -156,7 +178,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         if (direction != Vector2.Zero)
         {
             velocity.X = direction.X * Speed;
-            crouching = false;
+            DisableCrouch();
         }
         else
         {
