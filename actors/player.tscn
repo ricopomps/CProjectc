@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://buo6np72qdorv"]
+[gd_scene load_steps=25 format=3 uid="uid://buo6np72qdorv"]
 
 [ext_resource type="Script" path="res://CharacterBody2D.cs" id="1_hc67i"]
 [ext_resource type="Texture2D" uid="uid://cx8jh2en24lyl" path="res://assets/Sprite Pack 7/3 - Gordon/Combo_swings (80 x 64).png" id="2_u5j50"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://crfbcl3p5fp25" path="res://assets/Sprite Pack 7/3 - Gordon/Running (48 x 48).png" id="3_hjbm8"]
 [ext_resource type="Texture2D" uid="uid://beue0vbyfd7gu" path="res://assets/Sprite Pack 7/3 - Gordon/Landed (48 x 64).png" id="5_3j1kv"]
 [ext_resource type="Texture2D" uid="uid://cpi7u5h6qriqa" path="res://assets/Sprite Pack 7/3 - Gordon/Crouching (48 x 48).png" id="8_dw30w"]
+[ext_resource type="Script" path="res://actors/Sword.cs" id="9_e0x67"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_edckk"]
 radius = 17.3341
@@ -142,6 +143,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(5.41691, -53.3601)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sword:monitoring")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3, 0.4, 0.9, 1, 1.3, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, false, true]
 }
 
 [sub_resource type="Animation" id="Animation_jdq2m"]
@@ -716,6 +729,9 @@ _data = {
 "run": SubResource("Animation_rmia7")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t2jo4"]
+size = Vector2(36.9597, 77.344)
+
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(0.923036, 0.974511)
 script = ExtResource("1_hc67i")
@@ -752,3 +768,13 @@ autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_ny0ry")
 }
+
+[node name="Sword" type="Area2D" parent="."]
+monitoring = false
+script = ExtResource("9_e0x67")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+position = Vector2(47.6064, -38.2897)
+shape = SubResource("RectangleShape2D_t2jo4")
+
+[connection signal="body_entered" from="Sword" to="Sword" method="OnBodyEntered"]
