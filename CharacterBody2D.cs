@@ -17,6 +17,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private bool landing = false;
     private bool shouldTriggerLandAnimation = false;
     private bool attacking = false;
+    private bool crouching = false;
 
 
     public override void _Ready()
@@ -37,6 +38,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         {
             velocity.Y += gravity * (float)delta;
             shouldTriggerLandAnimation = true;
+            crouching = false;
         }
 
         if (IsOnFloor())
@@ -48,6 +50,11 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
             }
 
             doubleJumpAvailable = true;
+        }
+
+        if (IsOnFloor() && !attacking && Input.IsActionJustPressed("crouch"))
+        {
+            HandCrouch();
         }
 
         // Handle Jump.
@@ -87,6 +94,10 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
             {
                 anim = "landed";
             }
+            else if (crouching)
+            {
+                anim = "crouch";
+            }
             else
             {
                 anim = vector.X != 0 ? "run" : "idle";
@@ -112,6 +123,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private void HandleAttack()
     {
         attacking = true;
+        crouching = false;
         attackTimer.Start();
     }
 
@@ -119,6 +131,11 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     {
         landing = true;
         landTimer.Start();
+    }
+
+    private void HandCrouch()
+    {
+        crouching = !crouching;
     }
 
     private void OnAttackTimerTimeout()
@@ -139,6 +156,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         if (direction != Vector2.Zero)
         {
             velocity.X = direction.X * Speed;
+            crouching = false;
         }
         else
         {
