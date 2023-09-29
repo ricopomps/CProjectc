@@ -779,10 +779,12 @@ scale = Vector2(0.923036, 0.974511)
 script = ExtResource("1_hc67i")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -36.9416)
 shape = SubResource("CapsuleShape2D_edckk")
 
 [node name="CrouchColisionShape" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -29.7585)
 shape = SubResource("CapsuleShape2D_xqnyu")
 
