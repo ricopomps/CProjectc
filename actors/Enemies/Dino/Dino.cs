@@ -6,7 +6,8 @@ public partial class Dino : CharacterBody2D
 
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public new float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
-    private Boolean hit = false;
+    private bool hit = false;
+    private Timer hitTimer;
     private string animation;
     private AnimationPlayer animator;
     [Export]
@@ -15,10 +16,13 @@ public partial class Dino : CharacterBody2D
     {
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         damageable.Connect("OnHitEventHandler", new Callable(this, nameof(OnDamageableHit)));
+        hitTimer = GetNode<Timer>("HitTimer");
+        hitTimer.Timeout += OnHitTimerTimeout;
     }
     private void OnDamageableHit(Node node, float ammountChanged)
     {
         hit = true;
+        hitTimer.Start();
         GD.Print("OUCH!");
     }
     public override void _PhysicsProcess(double delta)
@@ -62,6 +66,11 @@ public partial class Dino : CharacterBody2D
             animation = anim;
             animator.Play(anim);
         }
+    }
+
+    private void OnHitTimerTimeout()
+    {
+        hit = false;
     }
 
 }
