@@ -6,7 +6,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     public const float Speed = 300.0f;
     public const float JumpVelocity = -400.0f;
 
-    private AnimatedSprite2D sprite;
+    private Sprite2D sprite;
     private string animation;
     private AnimationPlayer animator;
     private Timer attackTimer;
@@ -21,7 +21,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
 
     public override void _Ready()
     {
-        sprite = GetNode<AnimatedSprite2D>("Sprite");
+        sprite = GetNode<Sprite2D>("Sprite");
         animator = GetNode<AnimationPlayer>("AnimationPlayer");
         attackTimer = GetNode<Timer>("AttackTimer");
         landTimer = GetNode<Timer>("LandTimer");
@@ -70,7 +70,6 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
 
     private void Flip(Vector2 vector)
     {
-
         if (vector.X != 0)
             sprite.FlipH = (vector.X > 0) ? false : true;
     }
@@ -82,7 +81,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         {
             if (attacking)
             {
-                anim = "attacking";
+                anim = "combo";
             }
             else if (landing)
             {
@@ -105,7 +104,8 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         if (animation != anim)
         {
             animation = anim;
-            sprite.Play(animation);
+            // sprite.Play(animation);
+            animator.Play(anim);
         }
     }
 
