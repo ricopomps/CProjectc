@@ -11,6 +11,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private AnimationPlayer animator;
     private Timer attackTimer;
     private Timer landTimer;
+    private Area2D swordHitBox;
     private CollisionShape2D shape;
     private CollisionShape2D crouchShape;
     // Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -30,6 +31,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         landTimer = GetNode<Timer>("LandTimer");
         shape = GetNode<CollisionShape2D>("CollisionShape2D");
         crouchShape = GetNode<CollisionShape2D>("CrouchColisionShape");
+        swordHitBox = GetNode<Area2D>("Sword");
         attackTimer.Timeout += OnAttackTimerTimeout;
         landTimer.Timeout += OnLandTimerTimeout;
         crouchShape.Disabled = true;
@@ -83,7 +85,10 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private void Flip(Vector2 vector)
     {
         if (vector.X != 0)
+        {
             sprite.FlipH = (vector.X > 0) ? false : true;
+            swordHitBox.Scale = (vector.X > 0) ? new Vector2(1, 1) : new Vector2(-1, 1);
+        }
     }
 
     private void Animation(Vector2 vector)
