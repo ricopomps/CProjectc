@@ -136,7 +136,6 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     {
         if (animation != anim)
         {
-            GD.Print($"animations {anim}");
             animation = anim;
             animator.Play(anim);
         }
