@@ -20,7 +20,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private bool shouldTriggerLandAnimation = false;
     private bool attacking = false;
     private bool crouching = false;
-
+    private int attackChain = 0;
 
     public override void _Ready()
     {
@@ -93,7 +93,24 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         {
             if (attacking)
             {
+                // if (attackChain == 0)
+                // {
+                //     anim = "attack1";
+                // }
+                // else if (attackChain == 1)
+                // {
+                //     anim = "attack2";
+                // }
+                // else if (attackChain == 2)
+                // {
+                //     anim = "attack3";
+                // }
+                // else
+                // {
+                //     anim = "combo";
+                // }
                 anim = "combo";
+
             }
             else if (landing)
             {
@@ -119,8 +136,8 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     {
         if (animation != anim)
         {
+            GD.Print($"animations {anim}");
             animation = anim;
-            // sprite.Play(animation);
             animator.Play(anim);
         }
     }
@@ -130,6 +147,11 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         attacking = true;
         DisableCrouch();
         attackTimer.Start();
+    }
+
+    private void ResetAttackChain()
+    {
+        attackChain = 0;
     }
 
     private void HandleLand()
@@ -163,6 +185,7 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private void OnAttackTimerTimeout()
     {
         attacking = false;
+        attackChain = (attackChain + 1) % 3;
     }
 
     private void OnLandTimerTimeout()
