@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://beim6iaemsk7b" path="res://assets/Sprite Pack 8/4 - Percy/Running (32 x 32).png" id="5_5dcju"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v833f"]
-size = Vector2(77, 67)
+size = Vector2(77, 66.5)
 
 [sub_resource type="Animation" id="Animation_ulrqj"]
 length = 0.001
@@ -335,15 +335,17 @@ _data = {
 
 [node name="Dino" type="CharacterBody2D" node_paths=PackedStringArray("damageable")]
 position = Vector2(388, 283)
+collision_layer = 4
 script = ExtResource("1_7say6")
 damageable = NodePath("Damageable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1.5, -1.5)
+light_mask = 2
+position = Vector2(0, -0.25)
 shape = SubResource("RectangleShape2D_v833f")
 
 [node name="Sprite" type="Sprite2D" parent="."]
-position = Vector2(0, -17)
+position = Vector2(1, -14)
 scale = Vector2(-3.078, 3.078)
 texture = ExtResource("1_cduba")
 hframes = 9
@@ -362,5 +364,6 @@ wait_time = 0.35
 
 [node name="MovementTimer" type="Timer" parent="."]
 wait_time = 5.0
+autostart = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="Damageable" method="OnAnimationFinished"]

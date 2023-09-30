@@ -734,6 +734,7 @@ size = Vector2(36.9597, 77.344)
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(0.923036, 0.974511)
+collision_layer = 2
 script = ExtResource("1_hc67i")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -743,12 +744,12 @@ shape = SubResource("CapsuleShape2D_edckk")
 
 [node name="CrouchColisionShape" type="CollisionShape2D" parent="."]
 visible = false
+light_mask = 2
 position = Vector2(0, -29.7585)
 shape = SubResource("CapsuleShape2D_xqnyu")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(1.08338, -54.3863)
-zoom = Vector2(3, 3)
 
 [node name="AttackTimer" type="Timer" parent="."]
 wait_time = 0.6
@@ -771,10 +772,14 @@ libraries = {
 }
 
 [node name="Sword" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
 monitoring = false
 script = ExtResource("9_e0x67")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+light_mask = 0
+visibility_layer = 4
 position = Vector2(47.6064, -38.2897)
 shape = SubResource("RectangleShape2D_t2jo4")
 

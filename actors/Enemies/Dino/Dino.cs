@@ -25,7 +25,6 @@ public partial class Dino : CharacterBody2D
         movementTimer = GetNode<Timer>("MovementTimer");
         hitTimer.Timeout += OnHitTimerTimeout;
         movementTimer.Timeout += OnMovementTimerTimeout;
-        movementTimer.Start();
     }
     private void OnDamageableHit(Node node, float ammountChanged)
     {
