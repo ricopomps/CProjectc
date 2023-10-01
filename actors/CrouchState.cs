@@ -13,6 +13,10 @@ public partial class CrouchState : State
     public State AirState;
     [Export]
     public State GroundState;
+    [Export]
+    public State AttackingState;
+    [Export]
+    public string AttackAnimation = "combo";
     public override void StateInput(InputEvent @event)
     {
         if (Character.IsOnFloor())
@@ -31,7 +35,15 @@ public partial class CrouchState : State
                 NextState = GroundState;
                 Playback.Travel("move");
             }
+            if (@event.IsActionPressed("attack")) Attack();
         }
+    }
+
+    private void Attack()
+    {
+        NextState = AttackingState;
+
+        Playback.Travel(AttackAnimation);
     }
 
     public override void OnEnter()

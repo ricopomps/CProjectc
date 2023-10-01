@@ -905,6 +905,7 @@ shape = SubResource("CapsuleShape2D_edckk")
 light_mask = 2
 position = Vector2(0, -29.7585)
 shape = SubResource("CapsuleShape2D_xqnyu")
+disabled = true
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(1.08338, -54.3863)
@@ -977,12 +978,14 @@ CanMove = false
 wait_time = 0.2
 one_shot = true
 
-[node name="Crouch" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("Shape", "CrouchShape", "AirState", "GroundState")]
+[node name="Crouch" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("Shape", "CrouchShape", "AirState", "GroundState", "AttackingState")]
 script = ExtResource("15_hgvj7")
 Shape = NodePath("../../CollisionShape2D")
 CrouchShape = NodePath("../../CrouchColisionShape")
 AirState = NodePath("../Air")
 GroundState = NodePath("../Ground")
+AttackingState = NodePath("../Attacking")
+AttackAnimation = "attack1"
 CanMove = false
 
 [node name="StateDebugLabel" type="Label" parent="." node_paths=PackedStringArray("StateMachine")]
