@@ -5,10 +5,18 @@ public partial class GroundState : State
 {
     [Export]
     public State AirState;
+    [Export]
+    public State AttackingState;
+    [Export]
+    public string AttackAnimation = "combo";
     public const float JumpVelocity = -400.0f;
     public override void StateInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("jump")) Jump();
+        if (Character.IsOnFloor())
+        {
+            if (@event.IsActionPressed("jump")) Jump();
+            if (@event.IsActionPressed("attack")) Attack();
+        }
     }
 
     private void Jump()
@@ -20,6 +28,13 @@ public partial class GroundState : State
         NextState = AirState;
 
         Playback.Travel("jump");
+    }
+
+    private void Attack()
+    {
+        NextState = AttackingState;
+
+        Playback.Travel(AttackAnimation);
     }
 
     public override void StateProcess(double delta)

@@ -150,14 +150,14 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         if (animation != anim)
         {
             animation = anim;
-            animationTree.Set("parameters/Move/blend_position", vector.X);
+            animationTree.Set("parameters/move/blend_position", vector.X);
             // animator.Play(anim);
         }
     }
 
     private void SetAnimationTree(Vector2 vector)
     {
-        animationTree.Set("parameters/Move/blend_position", vector.X);
+        animationTree.Set("parameters/move/blend_position", vector.X);
     }
 
     private void HandleAttack()
