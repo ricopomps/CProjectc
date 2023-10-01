@@ -33,10 +33,6 @@ public partial class Damageable : Node
     {
         EmitSignal(nameof(OnHitEventHandler), GetParent(), damage);
         SetHealth(GetHealth() - damage);
-        // if (GetHealth() <= 0)
-        // {
-        //     GetParent().QueueFree();
-        // }
     }
 
     private void OnAnimationFinished(string animationName)

@@ -9,11 +9,14 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
     private Sprite2D sprite;
     private string animation;
     private AnimationPlayer animator;
+    private AnimationTree animationTree;
     private Timer attackTimer;
     private Timer landTimer;
     private Area2D swordHitBox;
     private CollisionShape2D shape;
     private CollisionShape2D crouchShape;
+    [Export]
+    private CharacterStateMachine StateMachine;
     // Get the gravity from the project settings to be synced with RigidBody nodes.
     public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
     private bool doubleJumpAvailable = true;
@@ -32,9 +35,12 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         shape = GetNode<CollisionShape2D>("CollisionShape2D");
         crouchShape = GetNode<CollisionShape2D>("CrouchColisionShape");
         swordHitBox = GetNode<Area2D>("Sword");
+        animationTree = GetNode<AnimationTree>("AnimationTree");
+        // StateMachine = GetNode<CharacterStateMachine>("CharacterStateMachine");
         attackTimer.Timeout += OnAttackTimerTimeout;
         landTimer.Timeout += OnLandTimerTimeout;
         crouchShape.Disabled = true;
+        animationTree.Active = true;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -65,19 +71,20 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         }
 
         // Handle Jump.
-        if ((Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("move_up")) && (doubleJumpAvailable || IsOnFloor()))
-        {
-            if (!IsOnFloor())
-                doubleJumpAvailable = false;
-            velocity.Y = JumpVelocity;
-        }
+        // if ((Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("move_up")) && (doubleJumpAvailable || IsOnFloor()))
+        // {
+        //     if (!IsOnFloor())
+        //         doubleJumpAvailable = false;
+        //     velocity.Y = JumpVelocity;
+        // }
 
         if (Input.IsActionJustPressed("attack") && IsOnFloor())
             HandleAttack();
 
         Flip(velocity);
-        Animation(velocity);
-        if (!attacking) HandleMovement(velocity);
+        // Animation(velocity);
+        SetAnimationTree(velocity);
+        if (!attacking && StateMachine.CheckIfCanMove()) HandleMovement(velocity);
 
     }
 
@@ -132,18 +139,25 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
         }
         else
         {
-            anim = vector.Y > 0 ? "fall" : "jump";
+            // anim = vector.Y > 0 ? "fall" : "jump";
+            anim = "";
         }
-        SetAnimation(anim);
+        SetAnimation(anim, vector);
     }
 
-    private void SetAnimation(string anim)
+    private void SetAnimation(string anim, Vector2 vector)
     {
         if (animation != anim)
         {
             animation = anim;
-            animator.Play(anim);
+            animationTree.Set("parameters/Move/blend_position", vector.X);
+            // animator.Play(anim);
         }
+    }
+
+    private void SetAnimationTree(Vector2 vector)
+    {
+        animationTree.Set("parameters/Move/blend_position", vector.X);
     }
 
     private void HandleAttack()
