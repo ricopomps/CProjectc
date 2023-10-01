@@ -65,10 +65,10 @@ public partial class CharacterBody2D : Godot.CharacterBody2D
             doubleJumpAvailable = true;
         }
 
-        if (Input.IsActionJustPressed("crouch") && IsOnFloor() && !attacking && !landing)
-        {
-            HandleCrouch();
-        }
+        // if (Input.IsActionJustPressed("crouch") && IsOnFloor() && !attacking && !landing)
+        // {
+        //     HandleCrouch();
+        // }
 
         // Handle Jump.
         // if ((Input.IsActionJustPressed("ui_accept") || Input.IsActionJustPressed("move_up")) && (doubleJumpAvailable || IsOnFloor()))

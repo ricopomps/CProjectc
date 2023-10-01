@@ -43,6 +43,7 @@ public partial class CharacterStateMachine : Node
 
     private void SwitchStates(State newState)
     {
+        GD.Print("GOING FROM " + CurrentState.Name + " TO " + newState.Name);
         if (CurrentState != null)
         {
             CurrentState.OnExit();
