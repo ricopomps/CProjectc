@@ -28,7 +28,7 @@ public partial class Dino : CharacterBody2D
     }
     private void OnDamageableHit(Node node, float ammountChanged)
     {
-        if (damageable.health <= 0) dead = true;
+        if (damageable.Health <= 0) dead = true;
         hit = true;
         hitTimer.Start();
     }

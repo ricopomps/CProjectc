@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://17r1bjhnsh7"]
+[gd_scene load_steps=30 format=3 uid="uid://17r1bjhnsh7"]
 
 [ext_resource type="Script" path="res://actors/Enemies/Dino/Dino.cs" id="1_7say6"]
 [ext_resource type="Texture2D" uid="uid://bktcxtx02s6ng" path="res://assets/Sprite Pack 8/4 - Percy/Idle (32 x 32).png" id="1_cduba"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://e26u6nb12g67" path="res://assets/Sprite Pack 8/4 - Percy/Hurt (32 x 32).png" id="3_t7ftk"]
 [ext_resource type="Texture2D" uid="uid://dwys0806un2x" path="res://assets/Sprite Pack 8/4 - Percy/Falling (32 x 32).png" id="4_1mqmx"]
 [ext_resource type="Texture2D" uid="uid://beim6iaemsk7b" path="res://assets/Sprite Pack 8/4 - Percy/Running (32 x 32).png" id="5_5dcju"]
+[ext_resource type="Script" path="res://actors/CharacterStateMachine.cs" id="7_e2va1"]
+[ext_resource type="Script" path="res://actors/Enemies/Dino/GroundState.cs" id="8_66y04"]
+[ext_resource type="Script" path="res://actors/Enemies/Dino/DeadState.cs" id="9_4nwbn"]
+[ext_resource type="Script" path="res://actors/HitState.cs" id="10_fvqst"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v833f"]
 size = Vector2(77, 66.5)
@@ -333,11 +337,53 @@ _data = {
 "run": SubResource("Animation_bvp8q")
 }
 
-[node name="Dino" type="CharacterBody2D" node_paths=PackedStringArray("damageable")]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1xh7h"]
+animation = &"dead"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ff6i"]
+animation = &"hurt"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t7xgv"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qmu1y"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w8n5u"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_qtufx"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_t7xgv")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_qmu1y")
+blend_point_1/pos = -1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_w8n5u")
+blend_point_2/pos = 1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jmicb"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_max5l"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fd4m7"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6isbd"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_teyfc"]
+states/dead/node = SubResource("AnimationNodeAnimation_1xh7h")
+states/dead/position = Vector2(436, 19)
+states/hurt/node = SubResource("AnimationNodeAnimation_6ff6i")
+states/hurt/position = Vector2(656, 19)
+states/move/node = SubResource("AnimationNodeBlendSpace1D_qtufx")
+states/move/position = Vector2(551, 100)
+transitions = ["Start", "move", SubResource("AnimationNodeStateMachineTransition_jmicb"), "move", "dead", SubResource("AnimationNodeStateMachineTransition_max5l"), "move", "hurt", SubResource("AnimationNodeStateMachineTransition_fd4m7"), "hurt", "dead", SubResource("AnimationNodeStateMachineTransition_6isbd")]
+
+[node name="Dino" type="CharacterBody2D" node_paths=PackedStringArray("damageable", "StateMachine")]
 position = Vector2(388, 283)
 collision_layer = 4
 script = ExtResource("1_7say6")
 damageable = NodePath("Damageable")
+StateMachine = NodePath("CharacterStateMachine")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 light_mask = 2
@@ -365,5 +411,33 @@ wait_time = 0.35
 [node name="MovementTimer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
+
+[node name="CharacterStateMachine" type="Node" parent="." node_paths=PackedStringArray("CurrentState", "Character", "AnimationTree")]
+script = ExtResource("7_e2va1")
+CurrentState = NodePath("Ground")
+Character = NodePath("..")
+AnimationTree = NodePath("../AnimationTree")
+
+[node name="Ground" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("AirState", "CrouchState", "AttackingState")]
+script = ExtResource("8_66y04")
+AirState = NodePath("../Hit")
+CrouchState = NodePath("../Hit")
+AttackingState = NodePath("../Hit")
+
+[node name="Dead" type="Node" parent="CharacterStateMachine"]
+script = ExtResource("9_4nwbn")
+CanMove = false
+
+[node name="Hit" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("Damageable", "CharacterStateMachine", "DeadState")]
+script = ExtResource("10_fvqst")
+Damageable = NodePath("../../Damageable")
+CharacterStateMachine = NodePath("..")
+DeadState = NodePath("../Dead")
+CanMove = false
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_teyfc")
+anim_player = NodePath("../AnimationPlayer")
+parameters/move/blend_position = 0.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="Damageable" method="OnAnimationFinished"]

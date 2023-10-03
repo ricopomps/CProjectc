@@ -21,6 +21,8 @@ public partial class CharacterStateMachine : Node
                 States.Add(state);
                 state.Character = Character;
                 state.Playback = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
+
+                state.Connect("InterruptStateEventHandler", new Callable(this, nameof(OnStateInterruptState)));
             }
         }
     }
@@ -60,5 +62,8 @@ public partial class CharacterStateMachine : Node
         CurrentState.StateInput(@event);
     }
 
-
+    private void OnStateInterruptState(State newState)
+    {
+        SwitchStates(newState);
+    }
 }

@@ -4,20 +4,20 @@ using System;
 public partial class Damageable : Node
 {
     [Export]
-    public float health = 20f;
+    public float Health = 20f;
 
     [Signal]
     public delegate void OnHitEventHandler(Node node, float amountChanged);
     public float GetHealth()
     {
-        return health;
+        return Health;
     }
 
     public void SetHealth(float value)
     {
         var globalSignals = GetNode<GlobalSignalBus>("/root/GlobalSignalBus");
-        globalSignals.EmitSignal("HealthChangedEventHandler", GetParent(), value - health);
-        health = value;
+        globalSignals.EmitSignal("HealthChangedEventHandler", GetParent(), value - Health);
+        Health = value;
     }
     public override void _Ready()
     {

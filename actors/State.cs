@@ -8,6 +8,8 @@ public partial class State : Node
     public CharacterBody2D Character;
     public State NextState;
     public AnimationNodeStateMachinePlayback Playback;
+    [Signal]
+    public delegate void InterruptStateEventHandler(State newState);
     public virtual void StateInput(InputEvent inputEvent)
     {
 
